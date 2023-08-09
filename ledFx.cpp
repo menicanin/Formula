@@ -57,3 +57,41 @@ void fillOut(){
         delay(t);
     }
 }
+
+void checkBattery(int value){
+  
+    if(value < 2){
+     
+        for(int i = 0; i < 8; i++){ 
+            updateShiftRegister(0b00000000,0b00000000);
+            delay(100);
+            updateShiftRegister(0b11111111,0b11111111);
+            delay(100);
+            
+        }
+    
+    } else {
+       
+        byte firstByte = 0b11111111;
+        byte secondByte = 0b00000000;
+        if(value == 2) firstByte = 0b11000000;
+        else if(value == 3) firstByte = 0b11100000;
+        else if(value == 4) firstByte = 0b11110000;
+        else if(value == 5) firstByte = 0b11111100;
+        else if(value == 6) firstByte = 0b11111110;
+        else if(value == 7) secondByte = 0b10000000;
+        else if(value == 8) secondByte = 0b11000000;
+        else if(value == 9) secondByte = 0b11100000;
+        updateShiftRegister(firstByte, secondByte);
+        updateShiftRegister(firstByte, secondByte);
+        // updateShiftRegister(0b00000000, 0b00000000);
+        delay(2000);
+        clear();
+    }
+}
+
+void clear(){
+updateShiftRegister(0b00000000,0b00000000);
+  delay(100);
+  updateShiftRegister(0b00000000,0b00000000);
+}

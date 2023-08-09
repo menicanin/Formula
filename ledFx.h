@@ -21,5 +21,8 @@ void leftAnimation();
 void rightAnimation();
 void fillIn();
 void fillOut();
+void checkBattery(int value);
+void clear();
+
 
 #endif
