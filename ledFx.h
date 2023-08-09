@@ -24,6 +24,4 @@ void fillOut();
 void checkBattery(int value);
 void clear();
 
-// void nesto();
-
 #endif
