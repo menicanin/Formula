@@ -23,5 +23,6 @@ void fillIn();
 void fillOut();
 void checkBattery(int value);
 void clear();
+void ledON();
 
 #endif

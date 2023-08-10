@@ -15,33 +15,71 @@
 
 #include "ledFx.h"
 
-const int dataPin  = 9;      //    DS - data serial
-const int latchPin = 8;      // ST_CP - storage register, latch clock pin
-const int clockPin = 10;       // SH_CP - shift register clock pin
+const int dataPin  = 10;      //    DS - data serial
+const int latchPin = 12;      // ST_CP - storage register, latch clock pin
+const int clockPin = 11;       // SH_CP - shift register clock pin
 
+const int leftBlinkFx = 9;   //nodeMcu GIPO 04
+const int rightBlinkFx = 7;   //nodeMcu GPIO 15
+const int blinkFx = 8;       //nodeMcu GPIO 16
+const int fadeIn = 5;         //nodeMcu GIPO 17
+const int fadeOut = 6;         //nodeMcu GPIO 05
 
+bool fadeInPressed = false;
+bool fadeOutPressed = false;
+
+bool fadeInStatus = true;
 
 void setup() {
     pinMode(dataPin, OUTPUT);
     pinMode(clockPin, OUTPUT);
     pinMode(latchPin, OUTPUT);
-    ledFX(fillOut,1);
-    delay(2000);
 
-    fx();
+    pinMode(leftBlinkFx, INPUT);
+    pinMode(rightBlinkFx, INPUT);
+    pinMode(blinkFx, INPUT);
+    pinMode(fadeIn, INPUT);
+    pinMode(fadeOut, INPUT);
+    // ledFX(fillOut,1);
+    clear();
+    delay(200);
+    clear();
 }
 
 void loop() {
-
-}
-
-//example function for leds animation
-void fx(){
-ledFX(fillIn,1);
-    delay(2000);
-    ledFX(fillOut,1);
+    
+  if(digitalRead(leftBlinkFx) == HIGH){
     ledFX(leftAnimation, count);
+    if(!fadeInStatus) {
+      ledFX(fillIn, 1);
+    }
+  }
+
+  if(digitalRead(rightBlinkFx) == HIGH){
     ledFX(rightAnimation, count);
+  }
+
+  if(digitalRead(blinkFx) == HIGH){
     ledFX(fillIn, count, fillOut);
-    ledFX(fillIn,1);
+  }
+
+
+  if(digitalRead(fadeIn) == HIGH && !fadeInPressed){
+    ledFX(fillIn, 1);
+    fadeInPressed = true;
+
+    fadeInStatus = !fadeInStatus;
+  } else if (digitalRead(fadeIn) == false){
+    fadeInPressed = false;
+  }
+
+  if(digitalRead(fadeOut) == HIGH && !fadeOutPressed){
+    ledFX(fillOut, 1);
+    fadeOutPressed = true;
+  } else if (digitalRead(fadeOut) == false){
+    fadeOutPressed = false;
+  }
+
+delay(50);
+
 }
