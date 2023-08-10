@@ -57,10 +57,16 @@ void loop() {
 
   if(digitalRead(rightBlinkFx) == HIGH){
     ledFX(rightAnimation, count);
+    if(!fadeInStatus) {
+      ledFX(fillIn, 1);
+  }
   }
 
   if(digitalRead(blinkFx) == HIGH){
     ledFX(fillIn, count, fillOut);
+    if(!fadeInStatus) {
+      ledFX(fillIn, 1);
+  }
   }
 
 

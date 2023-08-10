@@ -35,6 +35,7 @@ bool trianglePressed = false;
 bool leftButtonPressed = false;
 bool rightButtonPressed = false;
 bool upButtonPressed = false;
+bool downButtonPressed = false;
 
 L298N motor(ENA, IN1, IN2);
 
@@ -83,6 +84,7 @@ void loop() {
         handleTriangleButton();
         handleTurboButton();
         handleUpButton();
+        handleDownButton();
         handleBatteryLevel();
         handleRumbleAndLed();
         handleServo();
@@ -90,7 +92,7 @@ void loop() {
         handleR2Button();
         handleL2Button();
         handleLeftButton();
-        // handleRightButton();
+        handleRightButton();
         handleL1Button();
         handleR1Button();
         
@@ -218,6 +220,17 @@ void handleL2Button() {
      }
 }
 
+void handleDownButton() {
+     if(PS4.Down() && !downButtonPressed){
+      digitalWrite(blinkFx, HIGH);
+      downButtonPressed = true; 
+      } 
+    else if (!PS4.Down()){
+      downButtonPressed = false;
+      digitalWrite(blinkFx, LOW);
+    }
+}
+
 void handleLeftButton() {
      if(PS4.Left() && !leftButtonPressed){
       digitalWrite(leftBlinkFx, HIGH);
@@ -229,15 +242,16 @@ void handleLeftButton() {
     }
 }
 
-// void handleRightButton() {
-//      if(PS4.Right() && !rightButtonPressed){
-//       ledFX(rightAnimation, count);
-//       rightButtonPressed = true; 
-//       } 
-//     else if (!PS4.Right()){
-//       rightButtonPressed = false;
-//     }
-// }
+void handleRightButton() {
+     if(PS4.Right() && !rightButtonPressed){
+       digitalWrite(rightBlinkFx, HIGH);
+      rightButtonPressed = true; 
+      } 
+    else if (!PS4.Right()){
+      rightButtonPressed = false;
+      digitalWrite(rightBlinkFx, LOW);
+    }
+}
 
 void handleL1Button() {
      if (PS4.L1()) { // turn on reverseOnObstacle function

@@ -15,10 +15,10 @@ void updateShiftRegister(byte leds1, byte leds2){
 void ledFX(void (*fn)(), int count, void (*fn2)()){
   for(int i = 0; i < count; i++){
     fn();
-    delay(100);
+    // delay(100);
     if(fn2){
       fn2();
-      delay(100);
+      // delay(100);
     }
   }
 }
