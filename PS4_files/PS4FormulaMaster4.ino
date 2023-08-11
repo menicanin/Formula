@@ -9,7 +9,7 @@
 
 #define leftBlinkFx 4
 #define fadeIn 17
-#define fadeOut 5
+#define fadeOut 5  //we dont need this one
 #define rightBlinkFx 15
 #define blinkFx 16
 
@@ -97,7 +97,7 @@ void loop() {
         handleR1Button();
         
         Serial.printf("Battery Level : %d\n", PS4.Battery());
-      //  delay(15);
+       delay(15);
     }
 }
 
@@ -142,19 +142,13 @@ void handleTurboButton() {
 
 void handleUpButton() {
      if(PS4.Up() && !upButtonPressed){
-       ledState = !ledState;
+        ledState = !ledState;
       digitalWrite(LED, ledState);
       digitalWrite(fadeIn,!ledState);
-      
-      digitalWrite(fadeOut,ledState);
-      upButtonPressed = true; 
+        upButtonPressed = true; 
       } 
     else if (!PS4.Up()){
       upButtonPressed = false;
-      digitalWrite(fadeIn,LOW);
-      digitalWrite(fadeOut,LOW);
-      
-      // delay(100);
     }
 }
 

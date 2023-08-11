@@ -23,12 +23,13 @@ const int leftBlinkFx = 9;   //nodeMcu GIPO 04
 const int rightBlinkFx = 7;   //nodeMcu GPIO 15
 const int blinkFx = 8;       //nodeMcu GPIO 16
 const int fadeIn = 5;         //nodeMcu GIPO 17
-const int fadeOut = 6;         //nodeMcu GPIO 05
+// const int fadeOut = 6;         //nodeMcu GPIO 05 // we don't need this one
 
 bool fadeInPressed = false;
 bool fadeOutPressed = false;
 
 bool fadeInStatus = true;
+bool help = false;
 
 void setup() {
     pinMode(dataPin, OUTPUT);
@@ -39,53 +40,62 @@ void setup() {
     pinMode(rightBlinkFx, INPUT);
     pinMode(blinkFx, INPUT);
     pinMode(fadeIn, INPUT);
-    pinMode(fadeOut, INPUT);
-    // ledFX(fillOut,1);
+    // pinMode(fadeOut, INPUT); // we don't need this one
+
     clear();
     delay(200);
     clear();
 }
 
 void loop() {
-    
-  if(digitalRead(leftBlinkFx) == HIGH){
+
+fadeInStatus = digitalRead(fadeIn);
+
+  if(digitalRead(leftBlinkFx)){
     ledFX(leftAnimation, count);
-    if(!fadeInStatus) {
+    if(fadeInStatus){
       ledFX(fillIn, 1);
-    }
+    } 
   }
 
   if(digitalRead(rightBlinkFx) == HIGH){
     ledFX(rightAnimation, count);
-    if(!fadeInStatus) {
+    if(fadeInStatus){
       ledFX(fillIn, 1);
-  }
+    }
   }
 
   if(digitalRead(blinkFx) == HIGH){
+    if(fadeInStatus){
+    ledFX(fillOut, count, fillIn);
+    ledFX(fillOut,1);
+    } else {
     ledFX(fillIn, count, fillOut);
-    if(!fadeInStatus) {
+    }
+    
+    if(fadeInStatus){
       ledFX(fillIn, 1);
+    } else (fillOut, 1);
   }
-  }
+  
+fadeInStatusFX();
+delay(50);
+}
 
+// VOID //
 
-  if(digitalRead(fadeIn) == HIGH && !fadeInPressed){
+void fadeInStatusFX(){
+    if(fadeInStatus){ 
+  if(fadeInStatus && !fadeInPressed){
     ledFX(fillIn, 1);
     fadeInPressed = true;
-
-    fadeInStatus = !fadeInStatus;
-  } else if (digitalRead(fadeIn) == false){
-    fadeInPressed = false;
+    } 
   }
 
-  if(digitalRead(fadeOut) == HIGH && !fadeOutPressed){
+  if(!fadeInStatus){ 
+  if(!fadeInStatus && fadeInPressed){
     ledFX(fillOut, 1);
-    fadeOutPressed = true;
-  } else if (digitalRead(fadeOut) == false){
-    fadeOutPressed = false;
+    fadeInPressed = false;
+    } 
   }
-
-delay(50);
-
 }
