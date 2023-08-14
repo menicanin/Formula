@@ -23,7 +23,6 @@ void fillIn();
 void fillOut();
 void checkBattery(int value);
 void clear();
-
-// void nesto();
+void ledON();
 
 #endif

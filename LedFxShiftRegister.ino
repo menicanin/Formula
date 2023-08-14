@@ -15,33 +15,87 @@
 
 #include "ledFx.h"
 
-const int dataPin  = 9;      //    DS - data serial
-const int latchPin = 8;      // ST_CP - storage register, latch clock pin
-const int clockPin = 10;       // SH_CP - shift register clock pin
+const int dataPin  = 10;      //    DS - data serial
+const int latchPin = 12;      // ST_CP - storage register, latch clock pin
+const int clockPin = 11;       // SH_CP - shift register clock pin
 
+const int leftBlinkFx = 9;   //nodeMcu GIPO 04
+const int rightBlinkFx = 7;   //nodeMcu GPIO 15
+const int blinkFx = 8;       //nodeMcu GPIO 16
+const int fadeIn = 5;         //nodeMcu GIPO 17
+// const int fadeOut = 6;         //nodeMcu GPIO 05 // we don't need this one
 
+bool fadeInPressed = false;
+bool fadeOutPressed = false;
+
+bool fadeInStatus = true;
+bool help = false;
 
 void setup() {
     pinMode(dataPin, OUTPUT);
     pinMode(clockPin, OUTPUT);
     pinMode(latchPin, OUTPUT);
-    ledFX(fillOut,1);
-    delay(2000);
 
-    fx();
+    pinMode(leftBlinkFx, INPUT);
+    pinMode(rightBlinkFx, INPUT);
+    pinMode(blinkFx, INPUT);
+    pinMode(fadeIn, INPUT);
+    // pinMode(fadeOut, INPUT); // we don't need this one
+
+    clear();
+    delay(200);
+    clear();
 }
 
 void loop() {
 
+fadeInStatus = digitalRead(fadeIn);
+
+  if(digitalRead(leftBlinkFx)){
+    ledFX(leftAnimation, count);
+    if(fadeInStatus){
+      ledFX(fillIn, 1);
+    } 
+  }
+
+  if(digitalRead(rightBlinkFx) == HIGH){
+    ledFX(rightAnimation, count);
+    if(fadeInStatus){
+      ledFX(fillIn, 1);
+    }
+  }
+
+  if(digitalRead(blinkFx) == HIGH){
+    if(fadeInStatus){
+    ledFX(fillOut, count, fillIn);
+    ledFX(fillOut,1);
+    } else {
+    ledFX(fillIn, count, fillOut);
+    }
+    
+    if(fadeInStatus){
+      ledFX(fillIn, 1);
+    } else (fillOut, 1);
+  }
+  
+fadeInStatusFX();
+delay(50);
 }
 
-//example function for leds animation
-void fx(){
-ledFX(fillIn,1);
-    delay(2000);
-    ledFX(fillOut,1);
-    ledFX(leftAnimation, count);
-    ledFX(rightAnimation, count);
-    ledFX(fillIn, count, fillOut);
-    ledFX(fillIn,1);
+// VOID //
+
+void fadeInStatusFX(){
+    if(fadeInStatus){ 
+  if(fadeInStatus && !fadeInPressed){
+    ledFX(fillIn, 1);
+    fadeInPressed = true;
+    } 
+  }
+
+  if(!fadeInStatus){ 
+  if(!fadeInStatus && fadeInPressed){
+    ledFX(fillOut, 1);
+    fadeInPressed = false;
+    } 
+  }
 }
