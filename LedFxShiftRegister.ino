@@ -23,7 +23,7 @@ const int leftBlinkFx = 9;   //nodeMcu GIPO 04
 const int rightBlinkFx = 7;   //nodeMcu GPIO 15
 const int blinkFx = 8;       //nodeMcu GPIO 16
 const int fadeIn = 5;         //nodeMcu GIPO 17
-// const int fadeOut = 6;         //nodeMcu GPIO 05 // we don't need this one
+const int fadeOut = 6;         //nodeMcu GPIO 05
 
 bool fadeInPressed = false;
 bool fadeOutPressed = false;
@@ -40,10 +40,10 @@ void setup() {
     pinMode(rightBlinkFx, INPUT);
     pinMode(blinkFx, INPUT);
     pinMode(fadeIn, INPUT);
-    // pinMode(fadeOut, INPUT); // we don't need this one
-
+    pinMode(fadeOut, INPUT);
+    // ledFX(fillOut,1);
     clear();
-    delay(200);
+    delay(6000);
     clear();
 }
 
@@ -55,7 +55,9 @@ fadeInStatus = digitalRead(fadeIn);
     ledFX(leftAnimation, count);
     if(fadeInStatus){
       ledFX(fillIn, 1);
-    } 
+    }
+     
+    
   }
 
   if(digitalRead(rightBlinkFx) == HIGH){
@@ -78,8 +80,10 @@ fadeInStatus = digitalRead(fadeIn);
     } else (fillOut, 1);
   }
   
+
 fadeInStatusFX();
 delay(50);
+
 }
 
 // VOID //
