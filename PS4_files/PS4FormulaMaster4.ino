@@ -9,10 +9,9 @@
 
 #define leftBlinkFx 4
 #define fadeIn 17
-#define fadeOut 5  //we dont need this one
+#define fadeOut 5
 #define rightBlinkFx 15
 #define blinkFx 16
-
 
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
@@ -28,10 +27,7 @@ const byte LED2 = 27; //front light
 bool BOOST = false;
 bool ledState = true;
 bool reverseOnObstacle = false;
-bool touchpadPressed = false;
-// bool ledStates[NUM_LEDS];
-
-bool trianglePressed = false;
+bool touchPadPressed = false;
 bool leftButtonPressed = false;
 bool rightButtonPressed = false;
 bool upButtonPressed = false;
@@ -44,14 +40,9 @@ byte g = 0;
 byte b = 255;
 
 void setup() {
-    Serial.begin(115200);
     PS4.begin("1a:2b:3c:01:01:01");
-
     PS4.setLed(r, g, b);
     PS4.sendToController();
-
-    Serial.println("Ready.");
-    
     myservo.attach(22);
     pinMode(ENA, OUTPUT);
     pinMode(IN1, OUTPUT);
@@ -60,19 +51,16 @@ void setup() {
     pinMode(TurboPlus, OUTPUT);
     pinMode(LED, OUTPUT);
     pinMode(LED2, OUTPUT);
-
     pinMode(leftBlinkFx, OUTPUT); 
     pinMode(rightBlinkFx, OUTPUT); 
     pinMode(fadeIn, OUTPUT); 
     pinMode(fadeOut, OUTPUT); 
     pinMode(blinkFx, OUTPUT); 
-
     digitalWrite(leftBlinkFx, LOW);
     digitalWrite(rightBlinkFx, LOW);
     digitalWrite(fadeIn, LOW);
     digitalWrite(fadeOut, LOW);
     digitalWrite(blinkFx, LOW);
-
     digitalWrite(TurboPlus, LOW);
     digitalWrite(LED, HIGH); //rear light
     digitalWrite(LED2, HIGH);  // front light
@@ -80,8 +68,7 @@ void setup() {
 
 void loop() {
     if (PS4.isConnected()) {
-        // handleTouchpadButton(); //touchpad button - shift register - battery status of the remote controller
-        handleTriangleButton();
+        handleTouchpadButton(); 
         handleTurboButton();
         handleUpButton();
         handleDownButton();
@@ -95,30 +82,12 @@ void loop() {
         handleRightButton();
         handleL1Button();
         handleR1Button();
-        
-        Serial.printf("Battery Level : %d\n", PS4.Battery());
-       delay(15);
     }
 }
 
 
-
-// HANDLE TOUCHPAD BUTTON - Shift register //
-// void handleTouchpadButton(){
-//   if(PS4.Touchpad() && !touchpadPressed){
-//     int value = PS4.Battery();
-//     delay(200);
-//     checkBattery(value);
-//     touchpadPressed = true; 
-//   } 
-//   else if (!PS4.Touchpad()){
-//     touchpadPressed = false;
-//   }
-// }
-
-
-void handleTriangleButton() {
-    if (PS4.Triangle() && !trianglePressed) {
+void handleTouchpadButton(){
+ if (PS4.Touchpad() && !touchPadPressed) {
         BOOST = !BOOST;
         if (BOOST) {
             r = 0;
@@ -129,11 +98,12 @@ void handleTriangleButton() {
             g = 0;
             b = 255;
         }
-        trianglePressed = true;
-    } else if (!PS4.Triangle()) {
-        trianglePressed = false;
+        touchPadPressed = true;
+    } else if (!PS4.Touchpad()) {
+        touchPadPressed = false;
     }
 }
+
 
 void handleTurboButton() {
     digitalWrite(TURBO, BOOST);
@@ -142,13 +112,20 @@ void handleTurboButton() {
 
 void handleUpButton() {
      if(PS4.Up() && !upButtonPressed){
-        ledState = !ledState;
+       ledState = !ledState;
       digitalWrite(LED, ledState);
       digitalWrite(fadeIn,!ledState);
-        upButtonPressed = true; 
+      
+      // digitalWrite(fadeOut,ledState);
+      upButtonPressed = true; 
       } 
     else if (!PS4.Up()){
       upButtonPressed = false;
+
+      // digitalWrite(fadeIn,LOW);
+      // digitalWrite(fadeOut,LOW);
+      
+      // delay(100);
     }
 }
 
@@ -162,7 +139,9 @@ void handleBatteryLevel() {
 }
 
 void handleRumbleAndLed() {
+  if(BOOST){
     PS4.setRumble(PS4.L2Value(), PS4.R2Value());
+  }
     PS4.setLed(r, g, b);
     PS4.sendToController();
 }
