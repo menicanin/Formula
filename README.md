@@ -4,6 +4,9 @@ This repository contains an Arduino program that controls a shift register to dr
 
 ## How it works
 
+![Asset 3@1080x-100](https://github.com/menicanin/Formula/assets/101369794/4451d1d4-df5e-4d34-96a5-a0753d24135c)
+
+
 The program consists of several files, including an `.ino` file that contains the main sketch, a `.cpp` file that defines the functions used by the sketch, and a `.h` file that declares the functions and variables used by the sketch.
 
 The main sketch sets up the pins used to control the shift register and runs a series of animations using the `ledFX` function. This function takes as arguments a pointer to an animation function, the number of times to repeat the animation, and an optional second animation function to run after each repetition of the first animation.
